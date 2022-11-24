@@ -43,15 +43,23 @@ When you are done please delete the network via `camktncr k8s delete <network-na
 ---
 # Docker Compose for Local Development
 ## Quickstart
+- clone this repo with submodule
+    ```shell
+    git clone --recurse-submodules https://github.com/Jameshsiao/camino-k8s-testnet-creator.git
+    ```
+    OR in existing folder to run
+    ```shell
+    git submodule init
+    ```
 - Generating node and genesis configs
-```shell
-camktncr generate local --num-stakers {{num_of_nodes:default 20}} --override
-```
-OR run from source directly
-```shell
-go run main.go generate local --num-stakers {{num_of_nodes:default 20}} --override
-```
+    ```shell
+    camktncr generate local --num-stakers {{num_of_nodes:default 20}} --override
+    ```
+    OR run from source directly
+    ```shell
+    go run main.go generate local --num-stakers {{num_of_nodes:default 20}} --override
+    ```
 - Run by docker-compose
-```shell
-docker-compose -f local/docker-compose/docker-compose.yml up
-```
+    ```shell
+    docker-compose -f local/docker-compose/docker-compose.yml up
+    ```
