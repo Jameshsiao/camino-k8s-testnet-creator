@@ -39,3 +39,19 @@ When you are done please delete the network via `camktncr k8s delete <network-na
 - the resources are encapsulated by namespace and not threadsafe, please choose names that are not existing already
 - the delete operation get rid of the whole namespace, anything else in there will also be deleted
 - changes to the genesis block require an update of the testnet creator
+
+---
+# Docker Compose for Local Development
+## Quickstart
+- Generating node and genesis configs
+```shell
+camktncr generate local --num-stakers {{num_of_nodes:default 20}} --override
+```
+OR run from source directly
+```shell
+go run main.go generate local --num-stakers {{num_of_nodes:default 20}} --override
+```
+- Run by docker-compose
+```shell
+docker-compose -f local/docker-compose/docker-compose.yml up
+```
