@@ -91,13 +91,16 @@ var generateCmd = &cobra.Command{
 			return err
 		}
 
-		image, err := cmd.Flags().GetString("image")
-		if err != nil {
-			return err
-		}
-		err = dockercompose.CreateComposeFile(network.Stakers, image)
-		if err != nil {
-			return err
+		// Docker-compose local
+		if networkName == "local" {
+			image, err := cmd.Flags().GetString("image")
+			if err != nil {
+				return err
+			}
+			err = dockercompose.CreateComposeFile(network.Stakers, network.GenesisConfig, image)
+			if err != nil {
+				return err
+			}
 		}
 
 		return nil

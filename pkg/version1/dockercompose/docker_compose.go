@@ -19,15 +19,15 @@ import (
 )
 
 var (
-	BASE_DIR        = "./local/docker-compose"
+	COMPOSE_DIR     = "local/docker-compose"
 	NETWORK_ADDRESS = "10.0.7."
 )
 
-func CreateKeyAndCertFile(stakers []version1.Staker, genesisConfig genesis.UnparsedConfig) error {
+func createCertFileAndNodeConfig(stakers []version1.Staker, genesisConfig genesis.UnparsedConfig) error {
 	var err error
 	for i, s := range stakers {
-		keyPath := fmt.Sprintf("%s/%s/staking/staker.key", BASE_DIR, s.NodeID)
-		certPath := fmt.Sprintf("%s/%s/staking/staker.crt", BASE_DIR, s.NodeID)
+		keyPath := fmt.Sprintf("%s/%s/staking/staker.key", COMPOSE_DIR, s.NodeID)
+		certPath := fmt.Sprintf("%s/%s/staking/staker.crt", COMPOSE_DIR, s.NodeID)
 
 		err = writeOutKeyAndCert(keyPath, s.KeyBytes, certPath, s.CertBytes)
 		if err != nil {
@@ -35,7 +35,7 @@ func CreateKeyAndCertFile(stakers []version1.Staker, genesisConfig genesis.Unpar
 		}
 
 		ip := fmt.Sprintf("%s%d", NETWORK_ADDRESS, i+2)
-		err = writeOutNodeConfig(s, uint64(i), BASE_DIR, ip, stakers[0].NodeID.String(), fmt.Sprintf("%s2", NETWORK_ADDRESS), genesisConfig)
+		err = writeOutNodeConfig(s, uint64(i), COMPOSE_DIR, ip, stakers[0].NodeID.String(), fmt.Sprintf("%s2", NETWORK_ADDRESS), genesisConfig)
 		if err != nil {
 			fmt.Printf("Write out node config failed on node %s: %s\n", s.NodeID, err)
 		}
@@ -141,7 +141,16 @@ func writeOutNodeConfig(s version1.Staker, index uint64, fileDir string, publicI
 	return nil
 }
 
-func CreateComposeFile(stakers []version1.Staker, image string) error {
+func CreateComposeFile(stakers []version1.Staker, genesisConfig genesis.UnparsedConfig, image string) error {
+	if err := os.MkdirAll(filepath.Dir(COMPOSE_DIR), perms.ReadWriteExecute); err != nil {
+		return fmt.Errorf("couldn't create compose dir %s: %w", COMPOSE_DIR, err)
+	}
+
+	err := createCertFileAndNodeConfig(stakers, genesisConfig)
+	if err != nil {
+		return fmt.Errorf("couldn't create cert file and node config: %w", err)
+	}
+
 	localNetworkConfig := [1]NetworkConfig{
 		{
 			Subnet:  fmt.Sprintf("%s0/24", NETWORK_ADDRESS),
@@ -179,7 +188,7 @@ func CreateComposeFile(stakers []version1.Staker, image string) error {
 	if err != nil {
 		return err
 	}
-	f, err := os.Create(fmt.Sprintf("%s/docker-compose.yml", BASE_DIR))
+	f, err := os.Create(fmt.Sprintf("%s/docker-compose.yml", COMPOSE_DIR))
 	if err != nil {
 		return err
 	}
