@@ -89,3 +89,18 @@ type Network struct {
 	GenesisConfig genesis.UnparsedConfig
 	Stakers       []Staker
 }
+
+type NodeConfig struct {
+	DataDir         string `json:"data-dir"`
+	HttpPort        uint64 `json:"http-port"`
+	StakingPort     uint64 `json:"staking-port"`
+	HttpHost        string `json:"http-host"`
+	PublicIp        string `json:"public-ip"`
+	IndexEnabled    bool   `json:"index-enabled"`
+	ApiAdminEnabled bool   `json:"api-admin-enabled"`
+	LogDisplayLevel string `json:"log-display-level"`
+	LogLevel        string `json:"log-level"`
+	NetworkID       uint64 `json:"network-id"`
+	BootstrapIPs    string `json:"bootstrap-ips"`
+	BootstrapIDs    string `json:"bootstrap-ids"`
+}

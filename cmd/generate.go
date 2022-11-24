@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"chain4travel.com/camktncr/pkg/version1"
+	"chain4travel.com/camktncr/pkg/version1/dockercompose"
 	"github.com/spf13/cobra"
 )
 
@@ -24,6 +25,8 @@ func init() {
 	generateCmd.Flags().Uint64("default-stake", 2e5, "initial stake for each validator")
 	generateCmd.Flags().Bool("override", false, "overwrite and delete existing data")
 
+	// docker-compose local
+	generateCmd.Flags().String("image", "c4tplatform/camino-node:chain4travel", "docker image for node container")
 }
 
 const DENOMINATION = 1e9
@@ -60,10 +63,14 @@ var generateCmd = &cobra.Command{
 			return err
 		}
 
+		networkId := 1002
+		if networkName == "local" {
+			networkId = 54321
+		}
 		networkConfig := version1.NetworkConfig{
 			NumStakers:        numStakers,
-			NetworkID:         1002,
-			NetworkName:       "kopernikus",
+			NetworkID:         uint64(networkId),
+			NetworkName:       networkName,
 			DefaultStake:      defaultStake * DENOMINATION,
 			NumInitialStakers: numInitialStakers,
 		}
@@ -81,6 +88,15 @@ var generateCmd = &cobra.Command{
 
 		err = os.WriteFile(networkPath, networkJson, 0700)
 		if err != nil && !errors.Is(err, os.ErrExist) {
+			return err
+		}
+
+		image, err := cmd.Flags().GetString("image")
+		if err != nil {
+			return err
+		}
+		err = dockercompose.CreateComposeFile(baseDir, network.Stakers, image)
+		if err != nil {
 			return err
 		}
 
