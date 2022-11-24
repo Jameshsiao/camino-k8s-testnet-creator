@@ -95,7 +95,7 @@ var generateCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		err = dockercompose.CreateComposeFile(baseDir, network.Stakers, image)
+		err = dockercompose.CreateComposeFile(network.Stakers, image)
 		if err != nil {
 			return err
 		}

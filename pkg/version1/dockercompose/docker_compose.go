@@ -141,7 +141,7 @@ func writeOutNodeConfig(s version1.Staker, index uint64, fileDir string, publicI
 	return nil
 }
 
-func CreateComposeFile(baseDir string, stakers []version1.Staker, image string) error {
+func CreateComposeFile(stakers []version1.Staker, image string) error {
 	localNetworkConfig := [1]NetworkConfig{
 		{
 			Subnet:  fmt.Sprintf("%s0/24", NETWORK_ADDRESS),
@@ -179,7 +179,7 @@ func CreateComposeFile(baseDir string, stakers []version1.Staker, image string) 
 	if err != nil {
 		return err
 	}
-	f, err := os.Create(fmt.Sprintf("%s/docker-compose.yml", baseDir))
+	f, err := os.Create(fmt.Sprintf("%s/docker-compose.yml", BASE_DIR))
 	if err != nil {
 		return err
 	}
