@@ -49,7 +49,7 @@ When you are done please delete the network via `camktncr k8s delete <network-na
     ```
     OR in existing folder to run
     ```shell
-    git submodule init
+    git submodule update --recursive --remote
     ```
 - Generating node and genesis configs
     ```shell
