@@ -25,7 +25,7 @@ func init() {
 	generateCmd.Flags().Uint64("default-stake", 2e5, "initial stake for each validator")
 	generateCmd.Flags().Bool("override", false, "overwrite and delete existing data")
 
-	// docker-compose local
+	// docker-compose custom local
 	generateCmd.Flags().String("image", "c4tplatform/camino-node:chain4travel", "docker image for node container")
 }
 
@@ -64,7 +64,7 @@ var generateCmd = &cobra.Command{
 		}
 
 		networkId := 1002
-		if networkName == "local" {
+		if networkName == "custom" {
 			networkId = 54321
 		}
 		networkConfig := version1.NetworkConfig{
@@ -91,8 +91,8 @@ var generateCmd = &cobra.Command{
 			return err
 		}
 
-		// Docker-compose local
-		if networkName == "local" {
+		// Docker-compose custom local
+		if networkName == "custom" {
 			image, err := cmd.Flags().GetString("image")
 			if err != nil {
 				return err

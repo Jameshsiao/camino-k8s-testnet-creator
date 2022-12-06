@@ -169,7 +169,7 @@ func BuildGenesisConfig(allocations []genesis.UnparsedAllocation, startime uint6
 	}
 
 	networkId := 1002
-	if networkName == "local" {
+	if networkName == "custom" {
 		networkId = 54321
 	}
 	return genesis.UnparsedConfig{

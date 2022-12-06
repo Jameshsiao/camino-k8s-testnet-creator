@@ -41,7 +41,7 @@ When you are done please delete the network via `camktncr k8s delete <network-na
 - changes to the genesis block require an update of the testnet creator
 
 ---
-# Docker Compose for Local Development
+# Docker Compose for Custom Local Development
 ## Quickstart
 - clone this repo with submodule
     ```shell
@@ -53,11 +53,11 @@ When you are done please delete the network via `camktncr k8s delete <network-na
     ```
 - Generating node and genesis configs
     ```shell
-    camktncr generate local --num-stakers {{num_of_nodes:default 20}} --override
+    camktncr generate custom --num-stakers {{num_of_nodes:default 20}} --override
     ```
     OR run from source directly
     ```shell
-    go run main.go generate local --num-stakers {{num_of_nodes:default 20}} --override
+    go run main.go generate custom --num-stakers {{num_of_nodes:default 20}} --override
     ```
 - Run by docker-compose
     ```shell
