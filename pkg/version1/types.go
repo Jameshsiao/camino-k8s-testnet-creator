@@ -104,3 +104,10 @@ type NodeConfig struct {
 	BootstrapIPs    string `json:"bootstrap-ips"`
 	BootstrapIDs    string `json:"bootstrap-ids"`
 }
+
+type CChainConfig struct {
+	PruningEnabled              bool   `json:"pruning-enabled"`
+	AllowMissingTries           bool   `json:"allow-missing-tries"`
+	OfflinePruningEnabled       bool   `json:"offline-pruning-enabled"`
+	OfflinePruningDataDirectory string `json:"offline-pruning-data-directory"`
+}

@@ -28,6 +28,7 @@ func init() {
 	// docker-compose custom local
 	generateCmd.Flags().Bool("docker-compose", false, "generate docker-compose instead of k8s")
 	generateCmd.Flags().String("image", "c4tplatform/camino-node:chain4travel", "docker image for node container")
+	generateCmd.Flags().Uint64("num-archive-nodes", 0, "number of archive nodes")
 }
 
 const DENOMINATION = 1e9
@@ -67,6 +68,10 @@ var generateCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
+		numArchiveNodes, err := cmd.Flags().GetUint64("num-archive-nodes")
+		if err != nil {
+			return err
+		}
 
 		networkId := 1002
 		if isDockerCompose {
@@ -102,7 +107,7 @@ var generateCmd = &cobra.Command{
 			if err != nil {
 				return err
 			}
-			err = dockercompose.CreateComposeFile(network.Stakers, network.GenesisConfig, image)
+			err = dockercompose.CreateComposeFiles(network.Stakers, network.GenesisConfig, image, numArchiveNodes)
 			if err != nil {
 				return err
 			}
