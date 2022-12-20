@@ -26,6 +26,7 @@ func init() {
 	generateCmd.Flags().Bool("override", false, "overwrite and delete existing data")
 
 	// docker-compose custom local
+	generateCmd.Flags().Bool("docker-compose", false, "generate docker-compose instead of k8s")
 	generateCmd.Flags().String("image", "c4tplatform/camino-node:chain4travel", "docker image for node container")
 }
 
@@ -40,6 +41,10 @@ var generateCmd = &cobra.Command{
 		networkName := args[0]
 
 		override, err := cmd.Flags().GetBool("override")
+		if err != nil {
+			return err
+		}
+		isDockerCompose, err := cmd.Flags().GetBool("docker-compose")
 		if err != nil {
 			return err
 		}
@@ -64,8 +69,8 @@ var generateCmd = &cobra.Command{
 		}
 
 		networkId := 1002
-		if networkName == "custom" {
-			networkId = 54321
+		if isDockerCompose {
+			networkId = version1.DOCKER_COMPOSE_LOCAL_NETWORK_ID
 		}
 		networkConfig := version1.NetworkConfig{
 			NumStakers:        numStakers,
@@ -92,7 +97,7 @@ var generateCmd = &cobra.Command{
 		}
 
 		// Docker-compose custom local
-		if networkName == "custom" {
+		if isDockerCompose {
 			image, err := cmd.Flags().GetString("image")
 			if err != nil {
 				return err

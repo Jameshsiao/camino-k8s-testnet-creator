@@ -188,7 +188,7 @@ var createCmd = &cobra.Command{
 		}
 
 		now := time.Now().Unix()
-		genesisConfig := version1.BuildGenesisConfig(network.GenesisConfig.Allocations, uint64(now), network.Stakers[:numValidators], networkName)
+		genesisConfig := version1.BuildGenesisConfig(network.GenesisConfig.Allocations, uint64(now), network.Stakers[:numValidators], networkName, uint64(network.GenesisConfig.NetworkID))
 
 		// err = k8s.CreateNetworkConfigMap(ctx, k, network.GenesisConfig, k8sConfig)
 		err = k8s.CreateNetworkConfigMap(ctx, k, genesisConfig, k8sConfig)
