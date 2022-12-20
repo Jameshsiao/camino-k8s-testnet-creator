@@ -228,13 +228,14 @@ func CreateComposeFiles(stakers []version1.Staker, genesisConfig genesis.Unparse
 		},
 	}
 
+	entrypoint := "./camino-node --config-file /mnt/node/config.json --genesis /mnt/node/genesis.json --chain-config-dir /mnt/node/chains"
 	// Validators
 	for i, s := range stakers {
 		volumes := [1]string{fmt.Sprintf("./%s:/mnt/node", s.NodeID)}
 		ports := [1]string{fmt.Sprintf("%d:%d", 9650+i*2, 9650)}
 		yml.Services[s.NodeID.String()] = Container{
 			Image:      image,
-			Entrypoint: "./camino-node --config-file /mnt/node/config.json --genesis /mnt/node/genesis.json",
+			Entrypoint: entrypoint,
 			Volumes:    volumes[:],
 			Ports:      ports[:],
 			Networks: map[string]map[string]string{
@@ -252,7 +253,7 @@ func CreateComposeFiles(stakers []version1.Staker, genesisConfig genesis.Unparse
 		ports := [1]string{fmt.Sprintf("%d:%d", 9650+(i+len(stakers))*2, 9650)}
 		yml.Services[archiveNodeId] = Container{
 			Image:      image,
-			Entrypoint: "./camino-node --config-file /mnt/node/config.json --genesis /mnt/node/genesis.json --chain-config-dir /mnt/node/chains",
+			Entrypoint: entrypoint,
 			Volumes:    volumes[:],
 			Ports:      ports[:],
 			Networks: map[string]map[string]string{
